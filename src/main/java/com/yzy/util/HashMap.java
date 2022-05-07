@@ -651,8 +651,8 @@ public class HashMap<K,V> extends AbstractMap<K,V>
                 e = p;
             }
 
-            else if (p instanceof TreeNode) // 如果p是树节点
-                e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
+            else if (p instanceof TreeNode){ // 如果p是树节点
+                e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);}
 
             else {
                 System.out.println("开始遍历数组下标为 "+i+" 的链表");
@@ -739,15 +739,20 @@ public class HashMap<K,V> extends AbstractMap<K,V>
         Node<K,V>[] newTab = (Node<K,V>[])new Node[newCap];
         table = newTab;
         if (oldTab != null) { //下面就是遍历旧数组，把旧数组的值放进新数组
+            System.out.println("resize() 开始执行扩容，把旧数组的元素放进新元素");
             for (int j = 0; j < oldCap; ++j) {
                 Node<K,V> e;
                 if ((e = oldTab[j]) != null) {
-                    oldTab[j] = null;
-                    if (e.next == null)
-                        newTab[e.hash & (newCap - 1)] = e;
+                    oldTab[j] = null; //将旧数组的数据置为null
+                    if (e.next == null) {
+                        int i = e.hash & (newCap - 1);
+                        newTab[i] = e;
+                        System.out.println("有元素put到newTab 下标："+i+" 对应oldTab下标："+j+" 当前数组长度："+newTab.length);
+                    }
                     else if (e instanceof TreeNode)
                         ((TreeNode<K,V>)e).split(this, newTab, j, oldCap);
                     else { // preserve order
+                        // 把一个链表拆分成两个链表放进新数组？
                         Node<K,V> loHead = null, loTail = null;
                         Node<K,V> hiHead = null, hiTail = null;
                         Node<K,V> next;

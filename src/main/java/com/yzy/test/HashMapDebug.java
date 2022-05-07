@@ -32,7 +32,7 @@ public class HashMapDebug {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         HashMap<HashKey, Object> map = new HashMap<>();
         map.put(new HashKey("我是第一个","1","tag1"),new Object());
         map.put(new HashKey("我是第二个","1","tag2"),new Object());
@@ -43,6 +43,13 @@ public class HashMapDebug {
         map.put(new HashKey("我是第七个","1","tag7"),new Object());
         map.put(new HashKey("我是第八个","1","tag8"),new Object());
         map.put(new HashKey("我是第九个","1","tag9"),new Object());
+        map.put(new HashKey("我是第10个","1","tag10"),new Object());
+//            for (int i = 10; i < 100; i++) {
+//                int finalI = i;
+//                new Thread(()->map.put(new HashKey("我是第"+ finalI +"个","1","tag"+ finalI),new Object())).start();
+//
+//        }
+//            Thread.sleep(5000L);
     }
 
 }
