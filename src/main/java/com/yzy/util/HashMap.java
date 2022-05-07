@@ -428,6 +428,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
     // Additionally, if the table array has not been allocated, this
     // field holds the initial array capacity, or zero signifying
     // DEFAULT_INITIAL_CAPACITY.)
+    // 容量阈值，超出这个大小，将会进行扩容
     int threshold;
 
     /**
@@ -709,13 +710,16 @@ public class HashMap<K,V> extends AbstractMap<K,V>
         int oldThr = threshold;
         int newCap, newThr = 0;
         if (oldCap > 0) {
-            if (oldCap >= MAXIMUM_CAPACITY) {
+            if (oldCap >= MAXIMUM_CAPACITY) { //如果当前容量>2的30次方，直接将扩容阈值设置为2的31次方-1，也就是后续不再扩容了
                 threshold = Integer.MAX_VALUE;
                 return oldTab;
             }
             else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY &&
-                     oldCap >= DEFAULT_INITIAL_CAPACITY)
+                     oldCap >= DEFAULT_INITIAL_CAPACITY){
+                //将容量和扩容阈值都 * 2，两倍
                 newThr = oldThr << 1; // double threshold
+                System.out.println("执行了resize(),oldCap为："+oldCap+" newCap为："+newCap+" oldThr为："+oldThr+" newThr为："+newThr);
+            }
         }
         else if (oldThr > 0) // initial capacity was placed in threshold
             newCap = oldThr;
@@ -723,6 +727,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
             // 如果table为null或者长度为0
             newCap = DEFAULT_INITIAL_CAPACITY;// 初始化table数组，容量为16
             newThr = (int)(DEFAULT_LOAD_FACTOR * DEFAULT_INITIAL_CAPACITY); //新的负载临界值为 负载因子 * 数组长度 = 16 * 0.75 =12
+            System.out.println("初始化 设置了table数组的length："+newCap+" 设置了负载因子大小："+newThr);
         }
         if (newThr == 0) {
             float ft = (float)newCap * loadFactor;
@@ -733,7 +738,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
         @SuppressWarnings({"rawtypes","unchecked"})
         Node<K,V>[] newTab = (Node<K,V>[])new Node[newCap];
         table = newTab;
-        if (oldTab != null) {
+        if (oldTab != null) { //下面就是遍历旧数组，把旧数组的值放进新数组
             for (int j = 0; j < oldCap; ++j) {
                 Node<K,V> e;
                 if ((e = oldTab[j]) != null) {
@@ -784,8 +789,10 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      */
     final void treeifyBin(Node<K,V>[] tab, int hash) {
         int n, index; Node<K,V> e;
-        if (tab == null || (n = tab.length) < MIN_TREEIFY_CAPACITY)
+        if (tab == null || (n = tab.length) < MIN_TREEIFY_CAPACITY){// 如果tab为空或者tab的长度<64，不转化为树，而是resize()
+            System.out.println("treeifyBin：tab == null 或者 tab的长度："+(tab!=null?tab.length:0)+" <64 执行resize() 而不是转化为树");
             resize();
+        }
         else if ((e = tab[index = (n - 1) & hash]) != null) {
             TreeNode<K,V> hd = null, tl = null;
             do {
