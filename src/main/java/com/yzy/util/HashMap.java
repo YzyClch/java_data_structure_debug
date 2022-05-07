@@ -339,7 +339,8 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      */
     static final int hash(Object key) {
         int h;
-        return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
+        // 计算hash组成： 16位原先传入hashcode的高16位 + 传入的hashcode的高16位与低16位做^运算
+        return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16); //如果key为空返回0，
     }
 
     /**
@@ -396,7 +397,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      * (We also tolerate length zero in some operations to allow
      * bootstrapping mechanics that are currently not needed.)
      */
-    transient Node<K,V>[] table;
+    public transient Node<K,V>[] table;
 
     /**
      * Holds cached entrySet(). Note that AbstractMap fields are used
@@ -612,7 +613,11 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      *         previously associated <tt>null</tt> with <tt>key</tt>.)
      */
     public V put(K key, V value) {
-        return putVal(hash(key), key, value, false, true);
+        int hash = hash(key);
+//        System.out.println("key_hashCode       :  "+Integer.toBinaryString(key.hashCode()));
+//        System.out.println("key_hashCode >>> 16:  "+Integer.toBinaryString(key.hashCode()>>>16));
+//        System.out.println("               hash:  "+Integer.toBinaryString(hash));
+        return putVal(hash, key, value, false, true);
     }
 
     /**
@@ -629,42 +634,63 @@ public class HashMap<K,V> extends AbstractMap<K,V>
                    boolean evict) {
         Node<K,V>[] tab; Node<K,V> p; int n, i;
         if ((tab = table) == null || (n = tab.length) == 0) //table为空或者长度为0
-            n = (tab = resize()).length;
-        if ((p = tab[i = (n - 1) & hash]) == null)
-            tab[i] = newNode(hash, key, value, null);
+            n = (tab = resize()).length; // n为table数组的长度
+        if ((p = tab[i = (n - 1) & hash]) == null){
+            // p为计算出的数组下标
+            System.out.println("有元素put到数组 下标："+i+" 当前数组长度："+table.length);
+            tab[i] = newNode(hash, key, value, null); //如果该下标没有值，就把这个Node放到这个位置
+        }
         else {
+            // p为数组链表首个元素,e为要更新替换的元素
             Node<K,V> e; K k;
             if (p.hash == hash &&
-                ((k = p.key) == key || (key != null && key.equals(k))))
+                ((k = p.key) == key || (key != null && key.equals(k)))){
+                // 把旧值赋值给e
+                System.out.println("数组有元素将要更新 下标："+i+" 当前数组长度："+table.length);
                 e = p;
-            else if (p instanceof TreeNode)
+            }
+
+            else if (p instanceof TreeNode) // 如果p是树节点
                 e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
+
             else {
+                System.out.println("开始遍历数组下标为 "+i+" 的链表");
                 for (int binCount = 0; ; ++binCount) {
+                    System.out.println("当前链表下标："+(binCount+1));
                     if ((e = p.next) == null) {
+                        // 遍历直到下个元素为空，放进下个元素
                         p.next = newNode(hash, key, value, null);
-                        if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
-                            treeifyBin(tab, hash);
+                        System.out.println("新增节点，插入到链表下标："+(binCount+1)+" 插入后该链表长度："+(binCount+2)); //链表的0下标是数组元素
+                        // 放完后校验是否要转化成红黑树
+                        if (binCount >= TREEIFY_THRESHOLD - 1) {
+                            System.out.println("当前 binCount: "+binCount+" >= TREEIFY_THRESHOLD: "+(TREEIFY_THRESHOLD-1)+" 需要执行 treeifyBin() 数组下标："+ i);
+                            treeifyBin(tab, hash); //链表长度超过8变成红黑树
+                        }// -1 for 1st
                         break;
                     }
+                    // 如果遍历到要更新的key，直接退出循环
                     if (e.hash == hash &&
-                        ((k = e.key) == key || (key != null && key.equals(k))))
+                        ((k = e.key) == key || (key != null && key.equals(k)))){
+                        System.out.println("在数组下标为 "+i+" 链表下标为 "+(binCount+1)+" 的位置找到了匹配的key,更新这个key下的value");
                         break;
+                    }
                     p = e;
                 }
             }
+            // e不为空 说明是更新数据，替换value，返回旧value
             if (e != null) { // existing mapping for key
                 V oldValue = e.value;
                 if (!onlyIfAbsent || oldValue == null)
                     e.value = value;
                 afterNodeAccess(e);
-                return oldValue;
+                return oldValue; // 如果是更新旧值，就不会往下走了，插入新值就会继续往下走
             }
         }
+        // 记录新增的次数，更新元素不会走到这，新增才会
         ++modCount;
-        if (++size > threshold)
+        if (++size > threshold) //size+1,如果元素数量超过了临界值，调整数组大小
             resize();
-        afterNodeInsertion(evict);
+        afterNodeInsertion(evict); //模板方法
         return null;
     }
 
@@ -2002,8 +2028,8 @@ public class HashMap<K,V> extends AbstractMap<K,V>
                                        int h, K k, V v) {
             Class<?> kc = null;
             boolean searched = false;
-            TreeNode<K,V> root = (parent != null) ? root() : this;
-            for (TreeNode<K,V> p = root;;) {
+            TreeNode<K,V> root = (parent != null) ? root() : this; //找到根节点
+            for (TreeNode<K,V> p = root;;) { //遍历树节点
                 int dir, ph; K pk;
                 if ((ph = p.hash) > h)
                     dir = -1;
@@ -2027,6 +2053,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
                 }
 
                 TreeNode<K,V> xp = p;
+                // 根据dir判断插入到左边还是右边
                 if ((p = (dir <= 0) ? p.left : p.right) == null) {
                     Node<K,V> xpn = xp.next;
                     TreeNode<K,V> x = map.newTreeNode(h, k, v, xpn);
