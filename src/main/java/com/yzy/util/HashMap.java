@@ -266,7 +266,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      * resize operation. Should be less than TREEIFY_THRESHOLD, and at
      * most 6 to mesh with shrinkage detection under removal.
      */
-    static final int UNTREEIFY_THRESHOLD = 6;
+    static final int UNTREEIFY_THRESHOLD = 6; // 当节点数小于6，树转化成链表
 
     /**
      * The smallest table capacity for which bins may be treeified.
@@ -337,6 +337,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
      * cheapest possible way to reduce systematic lossage, as well as
      * to incorporate impact of the highest bits that would otherwise
      * never be used in index calculations because of table bounds.
+     * 为了减少hash碰撞？
      */
     static final int hash(Object key) {
         int h;
