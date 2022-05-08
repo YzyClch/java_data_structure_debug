@@ -25,6 +25,7 @@
 
 package com.yzy.util;
 
+import com.yzy.test.BinOut;
 import sun.misc.SharedSecrets;
 
 import java.io.IOException;
@@ -340,6 +341,15 @@ public class HashMap<K,V> extends AbstractMap<K,V>
     static final int hash(Object key) {
         int h;
         // 计算hash组成： 16位原先传入hashcode的高16位 + 传入的hashcode的高16位与低16位做^运算
+        System.out.println("开始执行hash()方法计算hash");
+        if (key!=null){
+            System.out.println("                      h = key.hashCode()："+key.hashCode());
+            System.out.println("                                h >>> 16："+(key.hashCode()>>>16));
+            System.out.println("                      h = key.hashCode()："+BinOut.toBinaryString(key.hashCode()));
+            System.out.println("                                h >>> 16："+BinOut.toBinaryString(key.hashCode()>>>16));
+            System.out.println("hash = (h = key.hashCode()) ^ (h >>> 16)："+BinOut.toBinaryString((h = key.hashCode()) ^ (h >>> 16)));
+        }
+        System.out.println("hash()计算结束");
         return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16); //如果key为空返回0，
     }
 
@@ -429,7 +439,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
     // field holds the initial array capacity, or zero signifying
     // DEFAULT_INITIAL_CAPACITY.)
     // 容量阈值，超出这个大小，将会进行扩容
-    int threshold;
+    public int threshold;
 
     /**
      * The load factor for the hash table.
@@ -618,7 +628,14 @@ public class HashMap<K,V> extends AbstractMap<K,V>
 //        System.out.println("key_hashCode       :  "+Integer.toBinaryString(key.hashCode()));
 //        System.out.println("key_hashCode >>> 16:  "+Integer.toBinaryString(key.hashCode()>>>16));
 //        System.out.println("               hash:  "+Integer.toBinaryString(hash));
-        return putVal(hash, key, value, false, true);
+        V v = putVal(hash, key, value, false, true);
+        System.out.println("**********************************************************");
+        System.out.println("传入的 hashCode："+key.hashCode());
+        System.out.println("hash()->："+hash);
+        System.out.println("传入的 hashCode 二进制："+ BinOut.toBinaryString(key.hashCode()));
+        System.out.println("hash()->       二进制："+BinOut.toBinaryString(hash));
+        System.out.println("**********************************************************");
+        return v;
     }
 
     /**
@@ -636,7 +653,15 @@ public class HashMap<K,V> extends AbstractMap<K,V>
         Node<K,V>[] tab; Node<K,V> p; int n, i;
         if ((tab = table) == null || (n = tab.length) == 0) //table为空或者长度为0
             n = (tab = resize()).length; // n为table数组的长度
-        if ((p = tab[i = (n - 1) & hash]) == null){
+        // 一定是二进制为1的位参与运算，所以结果一定在 n-1 以内
+        i = (n - 1) & hash;
+
+        System.out.println("putVal 计算下标：");
+        System.out.println(BinOut.toBinaryString(n-1)+" size -1 :"+(n-1));
+        System.out.println(BinOut.toBinaryString(hash)+"     hash :"+hash);
+        System.out.println(BinOut.toBinaryString((n - 1) & hash)+"下标："+((n - 1) & hash));
+
+        if ((p = tab[i]) == null){
             // p为计算出的数组下标
             System.out.println("有元素put到数组 下标："+i+" 当前数组长度："+table.length);
             tab[i] = newNode(hash, key, value, null); //如果该下标没有值，就把这个Node放到这个位置
@@ -665,7 +690,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
                         // 放完后校验是否要转化成红黑树
                         if (binCount >= TREEIFY_THRESHOLD - 1) {
                             System.out.println("当前 binCount: "+binCount+" >= TREEIFY_THRESHOLD: "+(TREEIFY_THRESHOLD-1)+" 需要执行 treeifyBin() 数组下标："+ i);
-                            treeifyBin(tab, hash); //链表长度超过8变成红黑树
+                            treeifyBin(tab, hash); //链表长度超过8并且数组长度到达64变成红黑树
                         }// -1 for 1st
                         break;
                     }
@@ -689,7 +714,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
         }
         // 记录新增的次数，更新元素不会走到这，新增才会
         ++modCount;
-        if (++size > threshold) //size+1,如果元素数量超过了临界值，调整数组大小
+        if (++size > threshold) //size+1,如果元素数量超过了临界值，调整数组大小,扩容为原来的两倍
             resize();
         afterNodeInsertion(evict); //模板方法
         return null;
@@ -722,7 +747,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
             }
         }
         else if (oldThr > 0) // initial capacity was placed in threshold
-            newCap = oldThr;
+            newCap = oldThr; //使用map有参构造会走这步，新的容量=旧阈值
         else {               // zero initial threshold signifies using defaults
             // 如果table为null或者长度为0
             newCap = DEFAULT_INITIAL_CAPACITY;// 初始化table数组，容量为16
@@ -730,6 +755,7 @@ public class HashMap<K,V> extends AbstractMap<K,V>
             System.out.println("初始化 设置了table数组的length："+newCap+" 设置了负载因子大小："+newThr);
         }
         if (newThr == 0) {
+            // 初始化计算扩容阈值
             float ft = (float)newCap * loadFactor;
             newThr = (newCap < MAXIMUM_CAPACITY && ft < (float)MAXIMUM_CAPACITY ?
                       (int)ft : Integer.MAX_VALUE);
