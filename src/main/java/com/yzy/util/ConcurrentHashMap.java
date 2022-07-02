@@ -1009,7 +1009,7 @@ public class ConcurrentHashMap<K,V> extends AbstractMap<K,V>
                 tab = helpTransfer(tab, f);
             else {
                 V oldVal = null;
-                synchronized (f) {
+                synchronized (f) { //头节点充当锁资源
                     if (tabAt(tab, i) == f) {
                         if (fh >= 0) {
                             binCount = 1;
