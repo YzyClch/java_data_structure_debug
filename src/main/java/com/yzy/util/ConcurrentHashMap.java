@@ -999,18 +999,23 @@ public class ConcurrentHashMap<K,V> extends AbstractMap<K,V>
             Node<K,V> f; int n, i, fh;
             if (tab == null || (n = tab.length) == 0)
                 tab = initTable(); //初始化table
-            else if ((f = tabAt(tab, i = (n - 1) & hash)) == null) {
+            else if ((f = tabAt(tab, i = (n - 1) & hash)) == null) { //找到node节点位置
                 // 如果node为空，则存入
                 if (casTabAt(tab, i, null,
                              new Node<K,V>(hash, key, value, null)))
+                    // 有可能两个线程都进了这个方法，那只有一个线程可以break，另一个走下一个else if
                     break;                   // no lock when adding to empty bin
             }
             else if ((fh = f.hash) == MOVED)
+                // 如果正在元素移动
                 tab = helpTransfer(tab, f);
             else {
                 V oldVal = null;
                 synchronized (f) { //头节点充当锁资源
-                    if (tabAt(tab, i) == f) {
+                    if (tabAt(tab, i) == f) { // 加锁后还需要判断加锁的是不是原来的头节点
+
+                        // 链表操作
+
                         if (fh >= 0) {
                             binCount = 1;
                             for (Node<K,V> e = f;; ++binCount) {
@@ -1021,17 +1026,22 @@ public class ConcurrentHashMap<K,V> extends AbstractMap<K,V>
                                     oldVal = e.val;
                                     if (!onlyIfAbsent)
                                         e.val = value;
+                                    // 找到了需要替换的位置 ，更新后退出循环
                                     break;
                                 }
                                 Node<K,V> pred = e;
                                 if ((e = e.next) == null) {
+                                    // 插入更新后退出循环
                                     pred.next = new Node<K,V>(hash, key,
                                                               value, null);
                                     break;
                                 }
                             }
                         }
+
+
                         else if (f instanceof TreeBin) {
+                            // 红黑树操作
                             Node<K,V> p;
                             binCount = 2;
                             if ((p = ((TreeBin<K,V>)f).putTreeVal(hash, key,
@@ -1043,8 +1053,9 @@ public class ConcurrentHashMap<K,V> extends AbstractMap<K,V>
                         }
                     }
                 }
-                if (binCount != 0) {
+                if (binCount != 0) { //如果执行了插入或者更新
                     if (binCount >= TREEIFY_THRESHOLD)
+                        // 转换红黑树
                         treeifyBin(tab, i);
                     if (oldVal != null)
                         return oldVal;
