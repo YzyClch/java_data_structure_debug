@@ -36,6 +36,7 @@ public class SetDebug {
     @Test
     public void linkedHashMapTest(){
         LinkedHashMap<String, Object> linkedHashMap = new LinkedHashMap<>();
+//        linkedHashMap.get();
         linkedHashMap.put("test1",new Object());
         LinkedHashSet linkedHashSet=new LinkedHashSet();
 //        linkedHashSet.add()

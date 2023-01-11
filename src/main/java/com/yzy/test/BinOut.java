@@ -25,7 +25,7 @@ public class BinOut {
     }
 
     public static void main(String[] args) {
-        System.out.println(toBinaryString(2));
+        System.out.println("2022-07-11".substring(0,7));
     }
 
 }
