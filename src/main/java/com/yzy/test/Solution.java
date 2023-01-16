@@ -10,6 +10,40 @@ import java.util.stream.Stream;
 
 public class Solution {
 
+
+    public void reverseString(char[] s) {
+        int left =0;
+        int right =s.length-1;
+        while (left<=right){
+            char t=s[left];
+            s[left]=s[right];
+            s[right]=t;
+            left++;
+            right--;
+        }
+    }
+
+
+    public void rotate(int[][] matrix) {
+        //对称行先交换
+        int length = matrix.length;
+        for (int i = 0; i < length / 2; i++) {
+            int[]temp=matrix[i];
+            matrix[i]=matrix[length-i-1];
+            matrix[length-i-1] =temp;
+        }
+        // 按中间交换
+        for (int i = 0; i < length; i++) {
+            for (int j = i+1; j < length; j++) {
+                int temp = matrix[i][j];
+                matrix[i][j]=matrix[j][i];
+                matrix[j][i]=temp;
+            }
+        }
+
+
+    }
+
     public boolean isValidSudoku(char[][] board) {
         int n = board.length;
 
