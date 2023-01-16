@@ -3,9 +3,73 @@ package com.yzy.test;
 import org.junit.Test;
 
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.stream.Stream;
 
 public class Solution {
+
+    public boolean isValidSudoku(char[][] board) {
+        int n = board.length;
+
+        for (int i = 0; i < n; i++) {
+            HashSet<Character> line = new HashSet<>();
+            HashSet<Character> col = new HashSet<>();
+            HashSet<Character> box = new HashSet<>();
+
+            for (int j = 0; j < n; j++) {
+                if (board[i][j]!='.' && !line.add(board[i][j])){
+                    return false;
+                }
+                if (board[j][i]!='.' && !col.add(board[j][i])){
+                    return false;
+                }
+                int a =(i/3)*3 + j/3;
+                int b =(i%3)*3 + j%3;
+                if (board[a][b]!='.' && !box.add(board[a][b])){
+                    return false;
+                }
+
+            }
+        }
+
+        return true;
+
+
+    }
+
+    /**
+     * 2,0 ->0
+     * 2,1 ->0
+     * 2,2 ->0
+     * 2,3 ->1
+     * 2,4 ->1
+     * 2,5 ->1
+     * 2,6 ->2
+     * 2,7 ->2
+     * 2,8 ->2
+     *
+     *
+     * 4,0 ->0
+     * 4,1 ->0
+     * 4,2 ->0
+     * 4,3 ->1
+     * 4,4 ->1
+     * 4,5 ->1
+     * 4,6 ->2
+     * 4,7 ->2
+     * 4,8 ->2
+     *
+     */
+
+
+
+    // 10 00，11 01 ，12 02 ，13 10, 14 11, 15 12, 16 20, 17 21 , 18 22
+    @Test
+    public void testisValidSudoku(){
+
+    }
 
 
     public static int[]intersect(int []nums1,int []nums2){
@@ -58,6 +122,38 @@ public class Solution {
                 left++;
             }
             right++;
+        }
+    }
+
+    public int[] twoSum(int[] nums, int target) {
+        int[] result = new int[2];
+        Map<Integer,Integer>map=new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int num = nums[i];
+            if (map.containsKey(target-num)){
+                result[0]=i;
+                result[1]=map.get(target-num);
+            }else {
+                map.put(num,i);
+            }
+        }
+        return result;
+    }
+
+    @Test
+    public void testTwoSum(){
+        int[] ints = twoSum(new int[]{2,0,11,7}, 9);
+        for (int i = 0; i < ints.length; i++) {
+            System.out.println(ints[i]);
+        }
+    }
+
+    @Test
+    public void test3(){
+        int[] ints = {1, 0, 1, 0, 1};
+        moveZeroes3(ints);
+        for (int anInt : ints) {
+            System.out.println(anInt);
         }
     }
 
