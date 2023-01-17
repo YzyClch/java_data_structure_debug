@@ -6,12 +6,33 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
-import java.util.stream.Stream;
 
 public class Solution {
 
 
-    public void reverseString(char[] s) {
+    public int reverse(int x) {
+        int r =0;
+        while (x !=0){
+            if (r>214748364 || r<-214748364) {
+                return 0;
+            }
+            int y = x % 10;
+            r=r*10+y;
+            x=x/10;
+        }
+        return r;
+    }
+
+    @Test
+    public void testReverse(){
+        System.out.println(reverse(1463847412));
+        System.out.println(964632435*10);
+        System.out.println(964632435);
+        System.out.println(Integer.MIN_VALUE);
+    }
+
+
+    public char[] reverseString(char[] s) {
         int left =0;
         int right =s.length-1;
         while (left<=right){
@@ -21,6 +42,7 @@ public class Solution {
             left++;
             right--;
         }
+        return s;
     }
 
 
