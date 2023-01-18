@@ -23,6 +23,65 @@ public class Solution {
         return r;
     }
 
+
+    public int firstUniqChar(String s) {
+        char[] chars = s.toCharArray();
+        int length = chars.length;
+        for (int n = 0; n < length; n++) {
+            int count =1;
+            for (int n2 = length-1; n2 >=0; n2--) {
+                if (chars[n]==chars[n2] && n!=n2){
+                    count++;
+                }
+            }
+            if (count==1){
+                return n;
+            }
+        }
+        return -1;
+    }
+
+    public int firstUniqChars(String s) {
+        int length = s.length();
+        int[] count = new int[26];
+        char[] chars = s.toCharArray();
+        for (int i = 0; i < length; i++) {
+            count[chars[i]-'a']++;
+        }for (int i = 0; i < length; i++) {
+            if (count[chars[i]-'a']==1){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+
+    public boolean isAnagram(String s, String t) {
+        int x=1;
+        int y=1;
+        char[] c1 = s.toCharArray();
+        char[] c2 = t.toCharArray();
+        for (char c : c1) {
+            x+=(c-100)*(c%100);
+        }
+        for (char c : c2) {
+            y+=(c-100)*(c%100);
+        }
+        return s.length() == t.length() && x==y;
+    }
+
+    @Test
+    public void testisAnagram(){
+        System.out.println(isAnagram("hqbqo","lsnma"));
+    }
+
+    @Test
+    public void testfirstUniqChar(){
+        System.out.println(firstUniqChar("jnaprrmwbbujwrgqqtccvkjvxwiimcvmokrdsbgpubcwlveeqeprvoofeepsntdrujehsthrdwunjfedhltnarwsqjxbtuwnnkklsqqmhxthicnwthvenkcvuxhxvpxihelaqariwlxtamqmocwawtcnbmilvswcurgffljwjlhbjknfpkwqckvtfbjwsosetpttjabnjxdcmwtcnievjilfcgtxmdmwmheivjrfvxvnxosrsmiwtvgnwdnwtbtogrwwxuhpetcdmttnvgttxilclxiuhpaodvmnbkwkakncbvwdgwfmitvfamuxapsfsculbtmwqvteqmsvndnctebfvaqkghculsgcjoctdmhaxqasspmermcsbencbaabxdlkxfpcdpxhaaxdnabtclwfwpcrrstxeodjnoechotqkvqoxovnoqvflligxumlttvbccimhqelfxlnotqvwfbkqogjjisxujsjgrehlosbiwpqtoraqihuvkvtaugcirbkrthlmjernseopgqansjutvvtfjxufudllhkaqgtldcupaexegdpbqxvrgxownqameonhaqwxtxetaitmctblfcfwvfdhwghvejhpuwootbxkvkhiarwlcegbrffpcfixtgbqfpthuqknrrbrkpwqqpakrnepxhmrsvktrmudomimlxjhhlkknbtspocopsdlxqtxcnjabnhnksqaxocsltfhcqmmrhmotndmwseqgshsitfgcxfhjebektvrfoqbhfdlxlkdlebsubsiiqerwwngxwlotppejqddepopkdfwoomxrpgjmhbhblwslrqidgsuexnwbpkfgbnknwuokahoiqhofvtmdxjhbtkqcpbpubnbutvqibeuewobrmbidsptstdlenbeqpuewwcinkshfncdhesvsqfahharpptnddjmtjtetsbbeeduhvvsirsoiwcjkwpjleeautxhjlbsxntfcjdpmfh"));
+    }
+
+
+
     @Test
     public void testReverse(){
         System.out.println(reverse(1463847412));
