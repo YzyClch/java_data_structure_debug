@@ -55,6 +55,119 @@ public class Solution {
         return -1;
     }
 
+    public int myAtoi(String s) {
+        char[] chars = s.toCharArray();
+        int r=0;
+        // 是否校验是不是-
+        boolean shouldCheck_ =true;
+        // 第一个数字是不是-
+        boolean first_ =false;
+
+        for (char c : chars) {
+            if (shouldCheck_){
+                if (c=='-'){
+                    shouldCheck_=false;
+                    first_=true;
+                }else if (isNum(c)){
+                    shouldCheck_=false;
+                    r=toNum(c);
+                }else if(c==' '){
+
+                }else if(c =='+'){
+                    shouldCheck_=false;
+                } else{
+                    return 0;
+                }
+            }else {
+                if(isNum(c)){
+                    if(r==214748364){
+                        //-2147483648
+                        //2147483647
+                        int cNum = toNum(c);
+                        if(first_){
+                            if (cNum <=7){
+                               r=r*10+cNum;
+                           }else {
+                               return -2147483648;
+                           }
+                        }else {
+                            if (cNum<=7){
+                                r=r*10+cNum;
+                            }else {
+                                return 2147483647;
+                            }
+                        }
+
+                    }else if (r>214748364){
+                        if (first_) {
+                            return -2147483648;
+                        }else {
+                            return 2147483647;
+                        }
+                    }else{
+                        r=r*10+toNum(c);
+                    }
+                }else if(c=='.'){
+                    return first_?r*-1:r;
+                }else if(c == '+' || c == '-'){
+                    return first_?r*-1:r;
+                }else if (!isNum(c)){
+                    return first_?r*-1:r;
+                }
+            }
+        }
+        return first_?r*-1:r;
+    }
+
+
+    public boolean isNum(char c){
+        return c>='0' && c<='9';
+    }
+
+    public int toNum(char c){
+        if (c=='-'){
+            return -1;
+        }else if (c>='0' && c<='9'){
+            return c-48;
+        }else {
+            return 10;
+        }
+    }
+
+    @Test
+    public void testmyAtoi(){
+        System.out.println(myAtoi("-5-"));
+    }
+
+
+    public boolean isPalindrome(String s) {
+        StringBuilder result= new StringBuilder();
+        for (char c : s.toLowerCase().toCharArray()) {
+            if (c>='a' && c<='z'){
+                result.append(c);
+            }
+        }
+        char[] chars = result.toString().toCharArray();
+        int l = chars.length /2;
+        if (l==0){
+            return true;
+        }
+        for (int i = 0; i < l; i++) {
+            if (chars[i] !=chars[chars.length-1-i]){
+             return false;
+            }
+        }
+        return true;
+    }
+
+    @Test
+    public void testisPalindrome(){
+        System.out.println(1/2);
+        System.out.println(0/2);
+        System.out.println(isPalindrome("0P"));
+        System.out.println("0P".toLowerCase());
+        System.out.println('0'<='z');
+    }
 
     public boolean isAnagram(String s, String t) {
         int x=1;
