@@ -52,6 +52,55 @@ public class Solution {
         return -1;
     }
 
+    public String countAndSay(int n) {
+        String s="1";
+        for (int i = 0; i < n-1; i++) {
+            s= describe(s);
+        }
+        return s;
+    }
+
+    public String describe(String s){
+        char[] chars = s.toCharArray();
+        char pre ='?';
+        int count=0;
+        String result ="";
+        for (char c : chars) {
+            if (c!=pre){
+                if(pre!='?'){
+                    result =result+count+pre;
+                    count=1;
+                    pre =c;
+                }else {
+                    count =1;
+                    pre = c;
+                }
+            }else{
+                count++;
+            }
+        }
+        return result+count+pre;
+    }
+
+    @Test
+    public void testCountAndSay(){
+        System.out.println(countAndSay(2));
+    }
+
+
+    public int strStr2(String haystack, String needle) {
+        int i = haystack.length() - needle.length() + 1;
+        for (int j = 0; j < i; j++) {
+            if (haystack.startsWith(needle, j)){
+                return j;
+            }else if (!haystack.contains(needle)){
+                j+=needle.length()-1;
+            }
+        }
+        return -1;
+    }
+
+
     @Test
     public void teststrstr(){
         System.out.println(strStr("hello","ll"));
