@@ -54,6 +54,7 @@ public class Solution {
 
     public String countAndSay(int n) {
         String s="1";
+        if (n==1)return s;
         for (int i = 0; i < n-1; i++) {
             s= describe(s);
         }
@@ -64,22 +65,19 @@ public class Solution {
         char[] chars = s.toCharArray();
         char pre ='?';
         int count=0;
-        String result ="";
+        StringBuilder result = new StringBuilder();
         for (char c : chars) {
             if (c!=pre){
                 if(pre!='?'){
-                    result =result+count+pre;
-                    count=1;
-                    pre =c;
-                }else {
-                    count =1;
-                    pre = c;
+                    result.append(count).append(pre);
                 }
+                count=1;
+                pre =c;
             }else{
                 count++;
             }
         }
-        return result+count+pre;
+        return result.append(count).append(pre).toString();
     }
 
     @Test
