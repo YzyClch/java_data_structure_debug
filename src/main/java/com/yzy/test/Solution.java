@@ -41,6 +41,22 @@ public class Solution {
         return -1;
     }
 
+
+    public int strStr(String haystack, String needle) {
+        int i = haystack.length() - needle.length() + 1;
+        for (int j = 0; j < i; j++) {
+            if (haystack.startsWith(needle, j)){
+                return j;
+            }
+        }
+        return -1;
+    }
+
+    @Test
+    public void teststrstr(){
+        System.out.println(strStr("hello","ll"));
+    }
+
     public int firstUniqChars(String s) {
         int length = s.length();
         int[] count = new int[26];
