@@ -170,6 +170,48 @@ public class Solution {
         return newHead;
     }
 
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+        list1=new ListNode(Integer.MIN_VALUE,list1);
+        list2=new ListNode(Integer.MIN_VALUE,list2);
+        ListNode newHead = new ListNode(Integer.MIN_VALUE);
+        ListNode left = newHead;
+        while (list1!=null && list2!=null){
+            if(list1.val<=list2.val){
+                left.next=new ListNode(list1.val);
+                left=left.next;
+                list1=list1.next;
+            }else {
+                left.next=new ListNode(list2.val);
+                left=left.next;
+                list2=list2.next;
+            }
+        }
+        left.next= list1==null?list2:list1;
+        newHead=newHead.next.next.next;
+        return newHead;
+    }
+
+    @Test
+    public void testmergeTwoLists(){
+        ListNode head = new ListNode(1);
+        ListNode node1 = new ListNode(2);
+        ListNode node2 = new ListNode(4);
+        ListNode node3 = new ListNode(1);
+        ListNode node4 = new ListNode(3);
+        ListNode node5 = new ListNode(4);
+        head.next=node1;
+        node1.next=node2;
+
+        node3.next=node4;
+        node4.next=node5;
+
+        ListNode listNode = mergeTwoLists(null, null);
+        while (listNode!=null){
+            System.out.println(listNode.val);
+            listNode=listNode.next;
+        }
+    }
+
     @Test
     public void testreverseList(){
         ListNode head = new ListNode(1);
