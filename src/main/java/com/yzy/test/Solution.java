@@ -2,10 +2,7 @@ package com.yzy.test;
 
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
+import java.util.*;
 
 public class Solution {
 
@@ -81,6 +78,8 @@ public class Solution {
       int val;
       ListNode next;
       ListNode(int x) { val = x; }
+        ListNode(int val, ListNode next) {
+            this.val = val; this.next = next; }
   }
 
     public class ListNode2 {
@@ -125,6 +124,67 @@ public class Solution {
         slow.next = slow.next.next;
         return head;
     }
+
+
+    /**
+     * 反正链表
+     * @param head
+     * @return
+     */
+    public ListNode reverseList(ListNode head) {
+        if (head==null || head.next==null){
+            return head;
+        }
+        Stack<ListNode> s = new Stack<>();
+        s.push(head);
+        while (head!=null){
+            s.push(head);
+            head=head.next;
+        }
+        head=s.pop();
+        ListNode left = head;
+        while (!s.isEmpty()){
+            left.next=s.pop();
+            left=left.next;
+        }
+        left.next=null;
+        return head;
+    }
+
+    /**
+     * 反正链表2
+     * @param head
+     * @return
+     */
+    public ListNode reverseList2(ListNode head) {
+        if (head==null){
+            return head;
+        }
+        ListNode newHead = new ListNode(head.val);
+        while (head!=null){
+            head=head.next;
+            if (head!=null){
+                newHead = new ListNode(head.val,newHead);
+            }
+        }
+        return newHead;
+    }
+
+    @Test
+    public void testreverseList(){
+        ListNode head = new ListNode(1);
+        ListNode node1 = new ListNode(2);
+        ListNode node2 = new ListNode(3);
+        ListNode node3 = new ListNode(4);
+        ListNode node4 = new ListNode(5);
+        head.next=node1;
+        node1.next=node2;
+        node2.next=node3;
+        node3.next=node4;
+        reverseList2(head);
+
+    }
+
 
 
     /**
