@@ -83,9 +83,92 @@ public class Solution {
       ListNode(int x) { val = x; }
   }
 
+    public class ListNode2 {
+     int val;
+        ListNode2 next;
+     ListNode2() {}
+     ListNode2(int val) {
+         this.val = val; }
+     ListNode2(int val, ListNode2 next) {
+         this.val = val; this.next = next; }
+ }
+
     public void deleteNode(ListNode node) {
         node.val=node.next.val;
         node.next=node.next.next;
+    }
+
+
+    /**
+     * 力扣双指针
+     * @param head
+     * @param n
+     * @return
+     */
+    public ListNode2 removeNthFromEnd2(ListNode2 head, int n) {
+        ListNode2 fast = head;
+        ListNode2 slow = head;
+        //fast移n步，
+        for (int i = 0; i < n; i++) {
+            fast = fast.next;
+        }
+        //如果fast为空，表示删除的是头结点
+        if (fast == null)
+            return head.next;
+
+        while (fast.next != null) {
+            fast = fast.next;
+            slow = slow.next;
+        }
+        //这里最终slow不是倒数第n个节点，他是倒数第n+1个节点，
+        //他的下一个结点是倒数第n个节点,所以删除的是他的下一个结点
+        slow.next = slow.next.next;
+        return head;
+    }
+
+
+    /**
+     * 自己写的双指针
+     * @param head
+     * @param n
+     * @return
+     */
+    public ListNode2 removeNthFromEnd(ListNode2 head, int n) {
+        ListNode2 right =head;
+        ListNode2 left =head;
+        for (int i = 0; i < n; i++) {
+            right = right.next;
+        }
+        if (right==null){
+            left=left.next;
+            return left;
+        }
+        if (right.next==null){
+            left.next=left.next.next;
+            return left;
+        }
+
+        while (right.next!=null){
+            right = right.next;
+            left=left.next;
+        }
+        left.next=left.next.next;
+
+        return head;
+    }
+
+    @Test
+    public void testRemoveNthFromEnd(){
+        ListNode2 head = new ListNode2(1);
+        ListNode2 node1 = new ListNode2(2);
+        ListNode2 node2 = new ListNode2(3);
+//        ListNode2 node3 = new ListNode2(4);
+//        ListNode2 node4 = new ListNode2(5);
+        head.next=node1;
+        node1.next=node2;
+//        node2.next=node3;
+//        node3.next=node4;
+        removeNthFromEnd(head,2);
     }
 
     @Test
