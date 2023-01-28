@@ -151,6 +151,37 @@ public class Solution {
         return head;
     }
 
+    public boolean hasCycle(ListNode head) {
+
+        while (head!=null){
+            if (head == head.next){
+                return true;
+            }
+            ListNode next = head.next;
+            head.next=head;
+            head=next;
+        }
+        return false;
+    }
+
+
+
+    @Test
+    public void testhasCycle(){
+        ListNode head = new ListNode(1);
+        ListNode node1 = new ListNode(2);
+        ListNode node2 = new ListNode(2);
+        ListNode node3 = new ListNode(1);
+//        ListNode node4 = new ListNode(5);
+//        ListNode node5 = new ListNode(6);
+        head.next=node1;
+        node1.next=node2;
+        node2.next=node3;
+        node3.next=head;
+//        node3.next=node4;
+//        node4.next=node5;
+        System.out.println(hasCycle(head));
+    }
     /**
      * 反正链表2
      * @param head
