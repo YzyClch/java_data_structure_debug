@@ -191,6 +191,64 @@ public class Solution {
         return newHead;
     }
 
+
+    public boolean isPalindromeNode(ListNode head) {
+        ListNode fast = head;
+        ListNode slow = head;
+        while (fast!=null){
+            fast=fast.next;
+            if (fast!=null){
+                fast=fast.next;
+                if (fast==null){
+                    slow=slow.next;
+                    break;
+                }
+            }
+            slow=slow.next;
+        }
+
+        slow=reverseList2(slow);
+
+        while (slow!=null){
+            if (slow.val!=head.val){
+                return false;
+            }
+            slow=slow.next;
+            head=head.next;
+        }
+        return true;
+    }
+
+
+    public ListNode reverse(ListNode head) {
+        ListNode prev = null;
+        while (head != null) {
+            ListNode next = head.next;
+            head.next = prev;
+            prev = head;
+            head = next;
+        }
+        return prev;
+    }
+
+
+
+    @Test
+    public void testtestisPalindrome(){
+        ListNode head = new ListNode(1);
+        ListNode node1 = new ListNode(2);
+        ListNode node2 = new ListNode(2);
+        ListNode node3 = new ListNode(1);
+//        ListNode node4 = new ListNode(5);
+//        ListNode node5 = new ListNode(6);
+        head.next=node1;
+        node1.next=node2;
+        node2.next=node3;
+//        node3.next=node4;
+//        node4.next=node5;
+        System.out.println(isPalindromeNode(head));
+    }
+
     @Test
     public void testmergeTwoLists(){
         ListNode head = new ListNode(1);
