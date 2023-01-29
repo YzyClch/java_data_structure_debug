@@ -2,6 +2,11 @@ package com.yzy.test;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class TreeTest {
 
 
@@ -33,6 +38,103 @@ public class TreeTest {
                 leftLtTight(treeNode.right,maxValue,treeNode.val);
     }
 
+
+    public boolean isSymmetric(TreeNode root) {
+        return treeEquals(root,root);
+    }
+
+    public boolean treeEquals(TreeNode left,TreeNode right){
+        if (left==null && right==null){
+            return true;
+        }
+        if (left==null || right==null){
+            return false;
+        }
+
+        if (left.left!=null && right.right!=null){
+            if (left.left.val != right.right.val){
+                return false;
+            }
+        }
+        if (left.right!=null && right.left!=null){
+            if (left.right.val != right.left.val){
+                return false;
+            }
+        }
+
+        if ((left.left==null && right.right!=null)||(left.left!=null && right.right==null)){
+            return false;
+        }
+
+        if ((right.left==null && left.right!=null)||(right.left!=null && left.right==null)){
+            return false;
+        }
+
+        return treeEquals(left.left,right.right) && treeEquals(left.right,right.left);
+    }
+
+
+
+    public List<List<Integer>> levelOrder(TreeNode root) {
+        if (root==null) return Collections.emptyList();
+        ArrayList<List<Integer>> result = new ArrayList<>();
+        getLeftAndRight(Arrays.asList(root),result);
+        return result;
+    }
+
+    public TreeNode sortedArrayToBST(int[] nums) {
+
+    }
+
+    private void getLeftAndRight(List<TreeNode> treeNodes,ArrayList<List<Integer>> result) {
+        if (treeNodes.isEmpty()){
+            return;
+        }
+        ArrayList<TreeNode> newTreeNodes = new ArrayList<>();
+        ArrayList<Integer> intArrays = new ArrayList<>();
+        for (TreeNode treeNode : treeNodes) {
+            intArrays.add(treeNode.val);
+            if (treeNode.left!=null){
+                newTreeNodes.add(treeNode.left);
+            }
+            if (treeNode.right!=null){
+                newTreeNodes.add(treeNode.right);
+            }
+        }
+        result.add(intArrays);
+        getLeftAndRight(newTreeNodes,result);
+
+    }
+
+
+
+
+
+
+    @Test
+    public void testlevelOrder(){
+        TreeNode treeNode = new TreeNode(3);
+        treeNode.left=new TreeNode(9);
+        treeNode.right=new TreeNode(20);
+//        treeNode.left.left=new TreeNode(3);
+//        treeNode.left.right=new TreeNode(4);
+        treeNode.right.left=new TreeNode(15);
+        treeNode.right.right=new TreeNode(7);
+        System.out.println(levelOrder(treeNode));
+    }
+
+
+    @Test
+    public void testisSymmetric(){
+        TreeNode treeNode = new TreeNode(1);
+        treeNode.left=new TreeNode(2);
+        treeNode.right=new TreeNode(2);
+        treeNode.left.left=new TreeNode(3);
+        treeNode.left.right=new TreeNode(4);
+        treeNode.right.left=new TreeNode(4);
+        treeNode.right.right=new TreeNode(3);
+        System.out.println(treeEquals(treeNode,treeNode));
+    }
 
 
     @Test
