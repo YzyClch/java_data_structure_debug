@@ -1,5 +1,6 @@
 package com.yzy.test;
 
+import com.sun.jmx.remote.internal.ArrayQueue;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -83,7 +84,42 @@ public class TreeTest {
     }
 
     public TreeNode sortedArrayToBST(int[] nums) {
+//
+//        TreeNode middle = new TreeNode(nums[nums.length / 2]);
+//
+//        System.out.println(Arrays.spliterator(nums, 0, nums.length / 2));
+//        System.out.println(Arrays.spliterator(nums, nums.length / 2, nums.length ));
+//
+//        middle.left= new TreeNode(nums.length/2/2);
+////        middle.right = new TreeNode()
+//
+//
+//        ArrayQueue<TreeNode> treeNodes = new ArrayQueue<TreeNode>(nums.length);
+//        for (int num : nums) {
+//            treeNodes.add(new TreeNode(num));
+//        }
+//        return null;
+        return getNode(nums,0,nums.length-1);
+    }
 
+
+    public TreeNode getNode(int[]nums,int start,int end){
+        if (start>end){
+            return null;
+        }
+        int mid = (start+end)/2;
+        System.out.println(mid);
+        TreeNode treeNode = new TreeNode(nums[mid]);
+        treeNode.left=getNode(nums,start,mid-1);
+        treeNode.right=getNode(nums,mid+1,end);
+        return treeNode;
+    }
+
+
+
+    @Test
+    public void testsortedArrayToBST(){
+        System.out.println(sortedArrayToBST(new int[]{-10,-3,0,5,9}));
     }
 
     private void getLeftAndRight(List<TreeNode> treeNodes,ArrayList<List<Integer>> result) {
@@ -160,5 +196,14 @@ public class TreeTest {
          this.left = left;
          this.right = right;
      }
- }
+
+        @Override
+        public String toString() {
+            return "TreeNode{" +
+                    "val=" + val +
+                    ", left=" + left +
+                    ", right=" + right +
+                    '}';
+        }
+    }
 }
