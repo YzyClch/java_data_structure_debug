@@ -116,6 +116,39 @@ public class TreeTest {
     }
 
 
+    public void merge(int[] nums1, int m, int[] nums2, int n) {
+        int i=0;
+        int j=0;
+        int index=0;
+        int[] temp = new int[m+n];
+        while (i<m && j<n){
+            if (nums1[i]<nums2[j]){
+                temp[index++]=nums1[i++];
+            }else {
+                temp[index++]=nums2[j++];
+            }
+        }
+        while (i!=m){
+            temp[index++]=nums1[i++];
+        }
+        while (j!=n){
+            temp[index++]=nums2[j++];
+        }
+        System.arraycopy(temp, 0, nums1, 0, temp.length);
+    }
+    @Test
+    public void testmerge(){
+        int[] ints = {1, 2, 3, 0, 0, 0};
+        merge(ints,3,new int[]{2,5,6},3);
+        for (int i = 0; i < ints.length; i++) {
+            System.out.println(ints[i]);
+        }
+    }
+
+
+
+
+
 
     @Test
     public void testsortedArrayToBST(){
