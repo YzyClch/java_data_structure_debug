@@ -116,6 +116,38 @@ public class TreeTest {
     }
 
 
+
+    public int firstBadVersion(int n) {
+
+        int left = 0;
+        int right = n;
+        int pos =0;
+
+        while (right>=left){
+            int key = (left - right) / 2 + right;
+            if (!isBadVersion(key)){
+                // 不是，说明在右区间
+              left=key+1;
+          }else {
+                // 是，说明在左区间
+              right=key-1;
+          }
+            pos =left;
+        }
+        return pos;
+
+    }
+
+    @Test
+    public void testfirstBadVersion(){
+        System.out.println(firstBadVersion(6));
+    }
+
+
+    public boolean isBadVersion(int n){
+        return n >= 3;
+    }
+
     public void merge(int[] nums1, int m, int[] nums2, int n) {
         int i=0;
         int j=0;
