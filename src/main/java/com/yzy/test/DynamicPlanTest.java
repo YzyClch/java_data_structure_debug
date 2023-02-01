@@ -31,12 +31,21 @@ public class DynamicPlanTest {
 
 
     public int maxSubArray(int[] nums) {
-
+            int pre= Math.max(nums[0], 0);
+            int max =nums[0];
+            for (int i = 1; i < nums.length; i++) {
+                int d =nums[i]+pre;
+                pre=Math.max(d,0);
+                max=Math.max(d,max);
+            }
+            return max;
     }
+
+
     
     @Test
-    public void test(){
-    
+    public void testmaxSubArray(){
+        System.out.println(maxSubArray(new int[]{3,-2,3}));
     }
 
     public int climbStairs(int n) {
