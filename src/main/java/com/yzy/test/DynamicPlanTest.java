@@ -42,6 +42,28 @@ public class DynamicPlanTest {
     }
 
 
+    public int rob(int[] nums) {
+        if (nums.length==1){
+            return nums[0];
+        }
+        int[] count = new int[nums.length];
+        count[0]=nums[0];
+        count[1]=Math.max(nums[0],nums[1]);
+        int max=count[1];
+        for (int i = 2; i < nums.length; i++) {
+            count[i] = Math.max(max,count[i-2]+nums[i]);
+            max=Math.max(count[i],max);
+        }
+        return max;
+
+    }
+
+
+    @Test
+    public void testrob(){
+        System.out.println(rob(new int[]{1,3,1,3,100}));
+    }
+
     
     @Test
     public void testmaxSubArray(){
