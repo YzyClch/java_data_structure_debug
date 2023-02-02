@@ -1,6 +1,5 @@
-package com.yzy.test;
+package com.yzy.leecode;
 
-import java.util.HashSet;
 import java.util.Random;
 
 public class Solution {

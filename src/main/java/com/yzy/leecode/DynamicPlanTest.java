@@ -1,4 +1,4 @@
-package com.yzy.test;
+package com.yzy.leecode;
 
 import org.junit.Test;
 

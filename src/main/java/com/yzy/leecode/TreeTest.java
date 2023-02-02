@@ -1,4 +1,4 @@
-package com.yzy.test;
+package com.yzy.leecode;
 
 import com.sun.jmx.remote.internal.ArrayQueue;
 import org.junit.Test;
