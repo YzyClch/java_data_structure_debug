@@ -27,14 +27,23 @@ public class MathTest {
     }
 
     public int countPrimes(int n) {
-        for (int i = 1; i < n + 1; i++) {
-            if (i%)
+        boolean[] arr = new boolean[n];
+        int c=0;
+        for (int i = 1; i < n-1; i++) {
+            if (arr[i]){
+                continue;
+            }
+            c++;
+            for (int j = i; j <n-1; j+=i+1) {
+                arr[j]=true;
+            }
         }
+        return c;
     }
 
     @Test
     public void testcountPrimes(){
-        System.out.println(countPrimes(10));
+        System.out.println(countPrimes(9));
 
     }
 
