@@ -48,6 +48,24 @@ public class MathTest {
     }
 
 
+    public int hammingWeight(int n) {
+        int c = 0;
+        for (int i = 0; i < 32; i++) {
+            if (((n >>> i) & 1) == 1) {
+                c++;
+            }
+        }
+        return c;
+    }
+
+
+
+    @Test
+    public void testhamingWeight(){
+        System.out.println(hammingWeight(3));
+    }
+
+
     public boolean isPowerOfThree(int n) {
        return n >0 && 1162261467 % n == 0;
     }
