@@ -47,6 +47,19 @@ public class MathTest {
         return sum;
     }
 
+
+    public boolean isPowerOfThree(int n) {
+       return n >0 && 1162261467 % n == 0;
+    }
+
+
+    @Test
+    public void testisPowerOfThree(){
+        System.out.println(isPowerOfThree(0));
+    }
+
+
+
     @Test
     public void testromanToInt(){
         System.out.println(romanToInt("VI"));
