@@ -2,6 +2,9 @@ package com.yzy.leecode;
 
 import org.junit.Test;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class OtherTest {
 
 
@@ -23,6 +26,31 @@ public class OtherTest {
         }
         return r;
     }
+
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> res =new ArrayList<>();
+        List<Integer> row =new ArrayList<>();
+        for (int i = 0; i < numRows; i++) {
+            row.add(0,1);
+            for (int j = 1; j < row.size()-1; j++) {
+                row.set(j,row.get(j)+row.get(j+1));
+            }
+
+            res.add(new ArrayList<>(row));
+        }
+        return res;
+    }
+
+
+    @Test
+    public void testgenerate(){
+        System.out.println(generate(5));
+    }
+
+    public List<Integer> get(int n){
+        return n==0?null:get(n-1);
+    }
+
 
 
     @Test
