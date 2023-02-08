@@ -66,6 +66,20 @@ public class OtherTest {
     }
 
 
+    public int missingNumber(int[] nums) {
+        int c1 = 0;
+        for (int i = 0; i < nums.length; i++) {
+            c1+=i-nums[i]+1;
+        }
+        return c1;
+    }
+
+    @Test
+    public void testmissingNumber(){
+        System.out.println(missingNumber(new int[]{3,0,1}));
+    }
+
+
     @Test
     public void testisValid(){
         System.out.println(isValid(")"));
