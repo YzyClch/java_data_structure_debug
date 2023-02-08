@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 public class OtherTest {
 
@@ -39,6 +40,35 @@ public class OtherTest {
             res.add(new ArrayList<>(row));
         }
         return res;
+    }
+
+
+    public boolean isValid(String s) {
+        Stack<Character> stack1 = new Stack<>();
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i)=='(' || s.charAt(i)=='{'||s.charAt(i)=='[' ){
+                stack1.push(s.charAt(i));
+            }else {
+                if (stack1.isEmpty()){
+                    return false;
+                }
+                Character pop = stack1.pop();
+                if (pop=='(' && s.charAt(i)!=')'){
+                    return false;
+                }else if (pop=='{' && s.charAt(i)!='}'){
+                    return false;
+                }else if (pop=='[' && s.charAt(i)!=']'){
+                    return false;
+                }
+            }
+        }
+        return stack1.isEmpty();
+    }
+
+
+    @Test
+    public void testisValid(){
+        System.out.println(isValid(")"));
     }
 
 
